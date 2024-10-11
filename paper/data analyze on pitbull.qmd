@@ -1,0 +1,146 @@
+---
+title: "Analyzing the data of rapper: Pitbull's songs from 2004 to 2024"
+subtitle: "Analyzing the data of rapper: Pitbull's songs from 2004 to 2024 to find the relationship between the year of album released and valence, valence and energy, energy and danceability"
+author: 
+  - Yuanchen Miao
+thanks: "Code and data are available at: https://github.com/NevaeH-9/vincentspotify"
+date: 24 september 2024
+date-format: long
+abstract: "In this paper, the relationship of year of album released and valence, valence and energy, energy and danceability of rapper Pitbull's song from 2004 to 2024 are analyzed. Pitbull is one of the most famous rapper in the world, lots of people loves rap since rap has its rhythm and beats make people get a feeling of swing. Also, rappers write their lyrics about their feelings or things they wanna talk about. Thus, we are finding the relationship between the year album released and valence to see the emotion change of pitbull, the feeling the song brings and the energy of the song are connected so the data of these two variables are analyzed. Since rap songs are easily making people want to dance, so the energy and danceablity of the song are also analyzed."
+format:
+  pdf:
+    toc: true
+    number-sections: true
+    colorlinks: true
+number-sections: true
+bibliography: references.bib
+---
+
+```{r}
+#| include: false
+#| warning: false
+#| message: false
+library(dplyr)
+library(tibble)
+library(knitr)
+library(tidyverse)
+library(kableExtra)
+```
+
+# Introduction {#sec-introduction}
+The R programming language (@R) and tidyverse (@tidyverse) were used to clean data, generate tables and create graphs, package knitr (@knitr) and (@kablee) is used for adding caption to table. The data were gathered and downloaded form spotify by using package spotifyr (@spotifyr) and devtools (@devtools).
+
+# Data {#sec-data}
+
+# Obtain Data {#sec-data-obtain_data}
+The data is obtained from the Spotify [@spotifyr], all of the songs from 2004 to 2024 and "album_release_date", "danceability", "valence" and "energy" are chosen to analyze.  This table @tbl-data shows the first several rows of the data we use.
+```{r}
+#| include: false
+#| warning: false
+#| message: false
+rds <- readRDS("../data/cleaned_pitbull.rds")
+```
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+#| label: tbl-data
+
+# View the first few rows of the data
+head(rds, 3) %>% 
+  kable(caption = "2004 - 2024 data of pitbull's song")  %>%
+  kable_styling(font_size = 10) 
+```
+
+# Result {#sec-result}
+
+```{r}
+#| label: fig-1
+#| fig-cap: "Relationship between year album released and valence" 
+#| warning: false
+#| message: false
+#| echo: false
+rds <- as_tibble(rds)
+
+rds |>
+  mutate(album_release_date = ymd(album_release_date)) |>
+  ggplot(aes(
+    x = album_release_date,
+    y = valence,
+    group = album_release_date
+  )) +
+  geom_boxplot() +
+  geom_jitter(alpha = 0.5, width = 0.3, height = 0) +
+  theme_minimal() +
+  labs(
+    x = "Album release date",
+    y = "valence"
+  )
+```
+```{r}
+#| label: fig-2
+#| fig-cap: "Relationship between year album released and valence" 
+#| warning: false
+#| message: false
+#| echo: false
+rds |>
+  mutate(album_release_date = ymd(album_release_date)) |>
+  ggplot(aes( x = album_release_date, y = valence)) +
+  geom_point(alpha = 0.3) +
+  geom_smooth() +
+  theme_minimal() +
+  labs(
+    x = "Album release date",
+    y = "Valence"
+  ) +
+  scale_color_brewer(palette = "Set1") +
+  theme(legend.position = "bottom")
+```
+```{r}
+#| label: fig-3
+#| fig-cap: "Relationship between valence and energy" 
+#| warning: false
+#| message: false
+#| echo: false
+
+rds |>
+  ggplot(aes( x = valence, y = energy)) +
+  geom_point(alpha = 0.3) +
+  geom_smooth() +
+  theme_minimal() +
+  labs(
+    x = "Vanlence",
+    y = "Energy"
+  ) +
+  scale_color_brewer(palette = "Set1") +
+  theme(legend.position = "bottom")
+```
+```{r}
+#| label: fig-4
+#| fig-cap: "Relationship between energy and danceability" 
+#| warning: false
+#| message: false
+#| echo: false
+
+rds |>
+  ggplot(aes( x = energy, y = danceability)) +
+  geom_point(alpha = 0.3) +
+  geom_smooth() +
+  theme_minimal() +
+  labs(
+    x = "Energy",
+    y = "Danceability"
+  ) +
+  scale_color_brewer(palette = "Set1") +
+  theme(legend.position = "bottom")
+```
+
+# Discussion {#sec-discussion}
+
+
+\newpage
+
+# References
+
+
