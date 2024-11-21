@@ -1,13 +1,13 @@
 ---
 title: "Analyzing the data of rapper: Pitbull's songs from 2004 to 2024"
-subtitle: "Analyzing the data of rapper: Pitbull's songs from 2004 to 2024 to find the relationship between the year of album released and valence, valence and energy, energy and danceability"
+subtitle: "Analyzing Pitbull’s Music: Trends in Valence, Energy, and Danceability from 2004 to 2024"
 author: 
   - Yuanchen Miao
   - Ziqi Zhu
 thanks: "Code and data are available at: https://github.com/NevaeH-9/vincentspotify"
-date: 10 October 2024
+date: 21 November 2024
 date-format: long
-abstract: "In this paper, the relationship of year of album released and valence, valence and energy, energy and danceability of rapper Pitbull's song from 2004 to 2024 are analyzed. Pitbull is one of the most famous rapper in the world, lots of people loves rap since rap has its rhythm and beats make people get a feeling of swing. Also, rappers write their lyrics about their feelings or things they wanna talk about. Thus, we are finding the relationship between the year album released and valence to see the emotion change of pitbull, the feeling the song brings and the energy of the song are connected so the data of these two variables are analyzed. Since rap songs are easily making people want to dance, so the energy and danceablity of the song are also analyzed."
+abstract: "This paper explores trends in the valence, energy, and danceability of Pitbull's songs from 2004 to 2024. The analysis examines how the emotional tone (valence) has changed over time, its relationship with energy, and how energy influences danceability. Using data from Spotify, the study identifies key patterns in Pitbull's music, including shifts in mood and energy over time, as well as the optimal energy levels for danceability."
 format:
   pdf:
     toc: true
@@ -29,10 +29,10 @@ library(kableExtra)
 ```
 
 # Introduction {#sec-introduction}
-The R programming language (@R) and tidyverse (@tidyverse) were used to clean data, generate tables and create graphs, package knitr (@knitr) and (@kablee) is used for adding caption to table. The data were gathered and downloaded form spotify by using package spotifyr (@spotifyr) and devtools (@devtools).
+The R programming language [@R] and tidyverse [@tidyverse] were used to clean data, generate tables and create graphs, package knitr [@knitr] and [@kablee] is used for adding caption to table. The data were gathered and downloaded form spotify by using package spotifyr [@spotifyr] and devtools [@devtools].
 
 # Data {#sec-data}
-The data is obtained from the Spotify [@spotifyr], all of the songs from 2004 to 2024 and "album_release_date", "danceability", "valence" and "energy" are chosen to analyze.  This table @tbl-data shows the first several rows of the data we use.
+The data used in this study was obtained using the Spotify Web API [@spotify_api] through the spotifyr package in R [@spotifyr], all of the songs from 2004 to 2024 and "album_release_date", "danceability", "valence" and "energy" are chosen to analyze.  This table @tbl-data shows the first several rows of the data we use.
 ```{r}
 #| include: false
 #| warning: false
@@ -47,16 +47,23 @@ rds <- readRDS("../data/cleaned_pitbull.rds")
 #| label: tbl-data
 
 # View the first few rows of the data
-head(rds, 3) %>% 
-  kable(caption = "2004 - 2024 data of pitbull's song")  %>%
-  kable_styling(font_size = 10) 
+rds %>%
+  rename(
+    "Album Release Date" = album_release_date,
+    "Danceability" = danceability,
+    "Valence" = valence,
+    "Energy" = energy
+  ) %>%
+  head(3) %>%
+  kable(caption = "2004 - 2024 Data of Pitbull's Songs") %>%
+  kable_styling(font_size = 10)
 ```
 
 # Result {#sec-result}
 
 ```{r}
 #| label: fig-1
-#| fig-cap: "Relationship between year album released and valence" 
+#| fig-cap: "Trend in Valence of Pitbull's songs Over Time" 
 #| warning: false
 #| message: false
 #| echo: false
@@ -78,11 +85,11 @@ rds |>
     y = "valence"
   )
 ```
-a box plot shows the valence (musical positivity) of Pitbull's songs over time, positive in general but become extremely neagtive around 2018
+Box plot shows the trend in the musical positivity (valence) of Pitbull's songs from 2004 to 2024, positive in general but become extremely neagtive around 2018, showing fluctuations in emotional tone across albums and highlighting shifts toward more upbeat or moody compositions.
 
 ```{r}
 #| label: fig-2
-#| fig-cap: "Relationship between year album released and valence" 
+#| fig-cap: "Trend in Valence of Pitbull's songs Over Time" 
 #| warning: false
 #| message: false
 #| echo: false
@@ -122,7 +129,8 @@ rds |>
   scale_color_brewer(palette = "Set1") +
   theme(legend.position = "bottom")
 ```
-scatter plot of relationships between valence and energy, showing a positive correlation when Valence < 0.5.
+Scatter plot showing the relationship between energy and valence in Pitbull's songs. The fit line indicates that songs with moderate positivity are associated with higher energy levels, showing a positive correlation when Valence < 0.5, while extremes in valence tend to have lower energy.
+
 ```{r}
 #| label: fig-4
 #| fig-cap: "Relationship between energy and danceability" 
@@ -143,7 +151,7 @@ rds |>
   scale_color_brewer(palette = "Set1") +
   theme(legend.position = "bottom")
 ```
-scatter plot of relationships between Energy and Danceability, showing a positive correlation when Energy < 0.5.
+Scatter plot showing how danceability changes with energy in Pitbull's songs. The fit line highlights that moderately high energy levels maximize danceability(when valence < 0.5), with a decline in danceability for extremely high-energy tracks.
 
 # Discussion {#sec-discussion}
 From the graph @fig-1, we can see that In the early years (pre-2010), there is a wide range of valence values, with some songs having very high positivity (close to 1) and others showing lower values, suggesting a mix of upbeat and moody tracks.
